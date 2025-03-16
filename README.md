@@ -43,6 +43,7 @@ const prizes = [
 
 - 卡片背景：替換 `images/card-back.png` 文件
 - 品牌標誌：替換 `images/brand-logo.png` 文件
+- 獎品背景：替換 `images/prize-background.png` 文件（顯示在刮刮樂下方的獎品背景）
 - 自訂顏色：在 `styles.css` 中修改 `:root` 變量的顏色值
 
 ## 如何使用

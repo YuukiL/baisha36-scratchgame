@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function() {
         cardsRow.innerHTML = '';
         
         // 創建10張卡片
-        for (let i = 0; i < 10; i++) {
+        for (let i = 0; i < 9; i++) {
             const card = document.createElement('div');
             card.classList.add('card');
             card.dataset.index = i;
@@ -253,6 +253,26 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // 創建圖片
         const img = document.createElement('img');
+        
+        // 確保圖片可以跨域使用
+        img.crossOrigin = 'anonymous';
+        
+        // 在移動設備上添加額外屬性
+        if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+            img.classList.add('saveable');
+            
+            // 更新按鈕文字
+            const saveBtn = document.getElementById('save-btn');
+            if (saveBtn) {
+                // 检测是否支援分享API
+                if (navigator.share && navigator.canShare) {
+                    saveBtn.textContent = '儲存/分享獎品';
+                } else {
+                    saveBtn.textContent = '儲存至手機相冊';
+                }
+            }
+        }
+        
         img.src = canvas.toDataURL('image/png');
         resultImage.appendChild(img);
     }
@@ -260,12 +280,64 @@ document.addEventListener('DOMContentLoaded', function() {
     // 保存獎品圖片
     function savePrizeImage() {
         const img = document.querySelector('#result-image img');
-        if (img) {
-            // 創建下載連結
+        if (!img) return;
+        
+        // 檢測是否為移動設備
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        
+        if (isMobile) {
+            // 移動設備 - 使用 Web Share API 或提供儲存指導
+            if (navigator.share && navigator.canShare) {
+                // 使用 Web Share API (現代瀏覽器支持)
+                fetch(img.src)
+                    .then(res => res.blob())
+                    .then(blob => {
+                        const file = new File([blob], '白砂の叁六獎品.png', { type: 'image/png' });
+                        
+                        if (navigator.canShare({ files: [file] })) {
+                            navigator.share({
+                                title: '我的白砂の叁六獎品',
+                                files: [file]
+                            }).catch(error => {
+                                console.error('分享失敗:', error);
+                                showSaveTip();
+                            });
+                        } else {
+                            showSaveTip();
+                        }
+                    }).catch(() => {
+                        showSaveTip();
+                    });
+            } else {
+                // 不支持 Web Share API 時提供視覺指導
+                showSaveTip();
+            }
+        } else {
+            // 桌面設備 - 使用傳統下載方式
             const link = document.createElement('a');
             link.download = '白砂の叁六獎品.png';
             link.href = img.src;
             link.click();
+        }
+    }
+    
+    // 顯示儲存提示
+    function showSaveTip() {
+        // 更新按鈕文字
+        const saveBtn = document.getElementById('save-btn');
+        saveBtn.textContent = '長按圖片儲存';
+        
+        // 添加點擊效果，點擊後提示用戶長按圖片
+        saveBtn.onclick = function() {
+            alert('請長按圖片，然後選擇「儲存圖片」或「保存圖片」選項將獎品儲存至您的相冊');
+        };
+        
+        // 確保圖片可以長按保存
+        const resultImage = document.querySelector('#result-image img');
+        if (resultImage) {
+            resultImage.style.cursor = 'pointer';
+            resultImage.setAttribute('crossOrigin', 'anonymous');
+            resultImage.classList.add('saveable');
         }
     }
 
