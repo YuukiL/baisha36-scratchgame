@@ -235,17 +235,17 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // 繪製獎品文字
         ctx.fillStyle = '#ffffff';
-        ctx.font = 'bold 24px Arial';
+        ctx.font = 'bold 20px Arial';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.fillText('恭喜您獲得', canvas.width / 2, 50);
         
-        ctx.font = 'bold 30px Arial';
+        ctx.font = 'bold 26px Arial';
         ctx.fillText(prizeText, canvas.width / 2, canvas.height / 2);
         
         // 添加使用期限
         ctx.font = '16px Arial';
-        ctx.fillText('使用期限：2024年12月31日', canvas.width / 2, canvas.height / 2 + 40);
+        ctx.fillText('使用期限：2025/08/31', canvas.width / 2, canvas.height / 2 + 40);
         
         // 添加品牌標識
         ctx.font = '16px Arial';
