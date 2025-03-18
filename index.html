@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>白砂の叁六 - 限時刮刮樂</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- LINE LIFF SDK -->
+    <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+</head>
+<body>
+    <!-- 載入畫面 -->
+    <div id="loading-overlay">
+        <div class="spinner"></div>
+        <p>正在載入遊戲...</p>
+    </div>
+    
+    <!-- 錯誤訊息 -->
+    <div id="error-message">
+        <div id="error-text">發生錯誤</div>
+    </div>
+    
+    <!-- 遊戲容器 -->
+    <div id="game-container">
+        <!-- 品牌標誌 -->
+        <div class="brand-logo">
+            <img src="brand-logo.png" alt="白砂の叁六">
+        </div>
+        
+        <!-- 初始畫面 -->
+        <div id="initial-screen" class="screen active">
+            <div class="game-title">
+                <h1>限時優惠刮刮樂</h1>
+                <p>點選一張卡片開始遊戲</p>
+            </div>
+            
+            <div class="cards-container">
+                <div class="cards-row"></div>
+            </div>
+        </div>
+        
+        <!-- 刮刮樂畫面 -->
+        <div id="scratch-screen" class="screen">
+            <div class="game-title">
+                <h2>刮開灰色部分查看獎品</h2>
+            </div>
+            
+            <div class="scratch-card-container">
+                <div class="scratch-card">
+                    <div id="prize-text"></div>
+                    <canvas id="scratch-canvas"></canvas>
+                </div>
+            </div>
+            
+            <div class="scratch-hint">
+                <p>用手指在灰色區域刮動以顯示獎品</p>
+            </div>
+        </div>
+        
+        <!-- 結果畫面 -->
+        <div id="result-screen" class="screen">
+            <div class="game-title">
+                <h2>恭喜獲得</h2>
+            </div>
+            
+            <div class="result-container">
+                <div id="prize-result" class="prize-result"></div>
+                
+                <div id="result-image" class="result-image"></div>
+                
+                <div class="actions">
+                    <button id="save-btn" class="action-btn">儲存獎品</button>
+                    <button id="finish-btn" class="action-btn">完成</button>
+                </div>
+            </div>
+            
+            <div class="usage-note">
+                <p>請在期限內憑此券至白砂の叁六消費時使用</p>
+                <p>單次消費限用一張優惠券</p>
+            </div>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html> 
