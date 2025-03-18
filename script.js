@@ -11,6 +11,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // 初始化遊戲
     initGame();
+    
+    console.log("獲取的 User ID:", userId);
 
 
     async function initLineLiff() {
@@ -38,6 +40,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+    
     function markUserAsPlayed(userId) {
         localStorage.setItem(`played_${userId}`, "true"); // 記錄已參加
         alert("✅ 恭喜你完成遊戲！");
