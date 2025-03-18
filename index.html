@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <script src="https://static.line-scdn.net/liff/edge/2.1/sdk.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>白砂の刮刮樂</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="game-container">
+        <!-- 初始畫面 -->
+        <div id="initial-screen" class="screen active">
+            <div class="title">
+                <h1>白砂の叁六刮刮樂</h1>
+                <p>挑選一張刮刮樂開始遊戲</p>
+            </div>
+            <div class="cards-container">
+                <!-- 10張刮刮樂卡片 -->
+                <div class="cards-row">
+                    <!-- 卡片將由JavaScript動態生成 -->
+                </div>
+            </div>
+        </div>
+
+        <!-- 刮刮樂畫面 -->
+        <div id="scratch-screen" class="screen">
+            <div class="scratch-card-container">
+                <div class="scratch-card">
+                    <canvas id="scratch-canvas"></canvas>
+                    <div id="prize-text" class="prize-text"></div>
+                </div>
+                <p class="instruction">刮開卡片，看看您的獎品！</p>
+            </div>
+        </div>
+
+        <!-- 結果畫面 -->
+        <div id="result-screen" class="screen">
+            <div class="result-container">
+                <h2>恭喜！</h2>
+                <div class="prize-result">
+                    <p>您獲得了：</p>
+                    <h3 id="prize-result"></h3>
+                </div>
+                <div id="result-image" class="result-image">
+                    <!-- 生成的獎品圖片將顯示在這裡 -->
+                </div>
+                <div class="buttons">
+                    <button id="save-btn" class="btn">儲存至手機相冊</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 品牌Logo -->
+    <div class="brand-logo">
+        <img src="images/brand-logo.png" alt="品牌Logo">
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html> 
