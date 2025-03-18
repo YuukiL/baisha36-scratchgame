@@ -1,4 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
+    // 全局變量用於存儲 LINE userID
+    let lineUserId = null;
+
     // 獎項設置（可由品牌方自定義）
     const prizes = [
         { name: "招待迎賓飲品乙份", weight: 35 },
@@ -9,55 +12,88 @@ document.addEventListener('DOMContentLoaded', function() {
         { name: "烤肉食材折價卷1000元", weight: 8 },
     ];
 
-    // 初始化遊戲
-    initGame();
-    
-    console.log("獲取的 User ID:", userId);
+    // 首先檢查是否在 LINE 環境中
+    if (!isLineWebview()) {
+        alert("請透過 LINE App 開啟此遊戲！");
+        document.body.innerHTML = '<div style="text-align: center; padding: 20px;">請使用 LINE APP 開啟此遊戲</div>';
+        return;
+    }
 
+    // 初始化 LIFF
+    initLineLiff();
 
     async function initLineLiff() {
         try {
-            await liff.init({ liffId: "2007079805-78p64LPW" }); // 替換成你的 LIFF ID
-    
-            if (liff.isLoggedIn()) {
-                const profile = await liff.getProfile();
-                const userId = profile.userId; // 取得 LINE 使用者 ID
-                checkUserPlayed(userId);
-            } else {
-                liff.login(); // 如果未登入，則導向 LINE 登入
+            await liff.init({ liffId: "2007079805-78p64LPW" });
+            
+            if (!liff.isLoggedIn()) {
+                await liff.login();
+                return;
             }
+
+            const profile = await liff.getProfile();
+            lineUserId = profile.userId;
+            
+            console.log("✅ 成功獲取 LINE ID:", lineUserId);
+            
+            // 檢查用戶是否已經玩過
+            checkUserPlayed(lineUserId);
+            
+            // 初始化遊戲
+            initGame();
+
         } catch (error) {
             console.error("LIFF 初始化錯誤:", error);
+            alert("遊戲載入失敗，請重新整理頁面");
         }
     }
-    
+
     function checkUserPlayed(userId) {
-        if (localStorage.getItem(`played_${userId}`)) {
-            alert("❌ 你已參加過活動，無法重複遊玩！");
-            document.getElementById("gameContainer").style.display = "none"; // 隱藏遊戲
+        if (!userId) {
+            console.error("❌ 無法獲取用戶ID");
+            alert("無法驗證用戶身份，請重新登入");
+            return;
+        }
+
+        const hasPlayed = localStorage.getItem(`played_${userId}`);
+        if (hasPlayed) {
+            console.log("❌ 用戶已參加過活動");
+            document.getElementById("gameContainer").style.display = "none";
+            
+            // 顯示已參加過的提示
+            const container = document.createElement('div');
+            container.style.textAlign = 'center';
+            container.style.padding = '20px';
+            container.style.color = '#ff4444';
+            container.innerHTML = `
+                <h2>您已經參加過活動</h2>
+                <p>每個 LINE 帳號只能參加一次活動哦！</p>
+            `;
+            document.getElementById("gameContainer").parentNode.insertBefore(container, document.getElementById("gameContainer"));
         } else {
-            console.log("✅ 用戶尚未玩過，可開始遊戲！");
+            console.log("✅ 用戶可以開始遊戲");
         }
     }
 
-    
-    function markUserAsPlayed(userId) {
-        localStorage.setItem(`played_${userId}`, "true"); // 記錄已參加
-        alert("✅ 恭喜你完成遊戲！");
+    function markUserAsPlayed() {
+        if (!lineUserId) {
+            console.error("❌ 無法記錄遊戲狀態：未獲取用戶ID");
+            return;
+        }
+        
+        localStorage.setItem(`played_${lineUserId}`, "true");
+        console.log("✅ 已記錄用戶完成遊戲");
     }
 
-    document.getElementById("finishGameButton").addEventListener("click", function() {
-        markUserAsPlayed(userId);
+    // 修改完成遊戲按鈕的事件監聽器
+    document.getElementById("finishGameButton")?.addEventListener("click", function() {
+        markUserAsPlayed();
+        alert("✅ 恭喜您完成遊戲！");
     });
 
     function isLineWebview() {
         return /Line/i.test(navigator.userAgent);
     }
-    
-    if (!isLineWebview()) {
-        alert("請透過 LINE App 開啟此遊戲！");
-    }
-    
     
     // 初始化遊戲
     function initGame() {
