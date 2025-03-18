@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     async function initLineLiff() {
         try {
-            await liff.init({ liffId: "YOUR_LIFF_ID" }); // 替換成你的 LIFF ID
+            await liff.init({ liffId: "2007079805-78p64LPW" }); // 替換成你的 LIFF ID
     
             if (liff.isLoggedIn()) {
                 const profile = await liff.getProfile();
